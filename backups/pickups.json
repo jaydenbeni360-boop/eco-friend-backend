@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "user_id": 1,
+    "type": "Household Waste",
+    "weight": "12.00",
+    "points": 12,
+    "collected_at": "2026-06-02T07:57:10.282Z"
+  },
+  {
+    "id": 2,
+    "user_id": 8,
+    "type": "Bulky Waste",
+    "weight": "3.50",
+    "points": 4,
+    "collected_at": "2026-06-02T08:09:21.924Z"
+  },
+  {
+    "id": 3,
+    "user_id": 9,
+    "type": "Household Garbage",
+    "weight": "4.20",
+    "points": 30,
+    "collected_at": "2026-06-02T08:32:19.384Z"
+  },
+  {
+    "id": 4,
+    "user_id": 9,
+    "type": "Household Garbage",
+    "weight": "4.20",
+    "points": 30,
+    "collected_at": "2026-06-02T08:32:43.059Z"
+  },
+  {
+    "id": 5,
+    "user_id": 9,
+    "type": "Household Garbage",
+    "weight": "4.20",
+    "points": 30,
+    "collected_at": "2026-06-02T08:33:25.384Z"
+  }
+]

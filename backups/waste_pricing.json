@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "waste_type": "Household Waste",
+    "price_per_kg": "2.50",
+    "description": "General household garbage",
+    "created_at": "2026-06-01T06:01:54.794Z"
+  },
+  {
+    "id": 2,
+    "waste_type": "Bulky Waste",
+    "price_per_kg": "5.00",
+    "description": "Large items like furniture",
+    "created_at": "2026-06-01T06:01:54.794Z"
+  },
+  {
+    "id": 3,
+    "waste_type": "Recyclable Waste",
+    "price_per_kg": "1.50",
+    "description": "Paper, plastic, metal",
+    "created_at": "2026-06-01T06:01:54.794Z"
+  },
+  {
+    "id": 4,
+    "waste_type": "Electronic Waste",
+    "price_per_kg": "10.00",
+    "description": "Old electronics and appliances",
+    "created_at": "2026-06-01T06:01:54.794Z"
+  }
+]

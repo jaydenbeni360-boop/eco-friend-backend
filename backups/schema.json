@@ -1,0 +1,167 @@
+[
+  {
+    "table_name": "pickups",
+    "column_name": "id",
+    "data_type": "integer"
+  },
+  {
+    "table_name": "pickups",
+    "column_name": "user_id",
+    "data_type": "integer"
+  },
+  {
+    "table_name": "pickups",
+    "column_name": "type",
+    "data_type": "character varying"
+  },
+  {
+    "table_name": "pickups",
+    "column_name": "weight",
+    "data_type": "numeric"
+  },
+  {
+    "table_name": "pickups",
+    "column_name": "points",
+    "data_type": "integer"
+  },
+  {
+    "table_name": "pickups",
+    "column_name": "collected_at",
+    "data_type": "timestamp without time zone"
+  },
+  {
+    "table_name": "schedules",
+    "column_name": "id",
+    "data_type": "integer"
+  },
+  {
+    "table_name": "schedules",
+    "column_name": "user_id",
+    "data_type": "integer"
+  },
+  {
+    "table_name": "schedules",
+    "column_name": "date",
+    "data_type": "date"
+  },
+  {
+    "table_name": "schedules",
+    "column_name": "time",
+    "data_type": "time without time zone"
+  },
+  {
+    "table_name": "schedules",
+    "column_name": "waste_type",
+    "data_type": "character varying"
+  },
+  {
+    "table_name": "schedules",
+    "column_name": "address",
+    "data_type": "text"
+  },
+  {
+    "table_name": "schedules",
+    "column_name": "status",
+    "data_type": "character varying"
+  },
+  {
+    "table_name": "schedules",
+    "column_name": "created_at",
+    "data_type": "timestamp without time zone"
+  },
+  {
+    "table_name": "schedules",
+    "column_name": "weight",
+    "data_type": "numeric"
+  },
+  {
+    "table_name": "schedules",
+    "column_name": "price",
+    "data_type": "numeric"
+  },
+  {
+    "table_name": "schedules",
+    "column_name": "amount_due",
+    "data_type": "numeric"
+  },
+  {
+    "table_name": "schedules",
+    "column_name": "payment_status",
+    "data_type": "character varying"
+  },
+  {
+    "table_name": "schedules",
+    "column_name": "latitude",
+    "data_type": "numeric"
+  },
+  {
+    "table_name": "schedules",
+    "column_name": "longitude",
+    "data_type": "numeric"
+  },
+  {
+    "table_name": "schedules",
+    "column_name": "house_number",
+    "data_type": "character varying"
+  },
+  {
+    "table_name": "users",
+    "column_name": "id",
+    "data_type": "integer"
+  },
+  {
+    "table_name": "users",
+    "column_name": "name",
+    "data_type": "character varying"
+  },
+  {
+    "table_name": "users",
+    "column_name": "email",
+    "data_type": "character varying"
+  },
+  {
+    "table_name": "users",
+    "column_name": "password_hash",
+    "data_type": "character varying"
+  },
+  {
+    "table_name": "users",
+    "column_name": "is_admin",
+    "data_type": "boolean"
+  },
+  {
+    "table_name": "users",
+    "column_name": "created_at",
+    "data_type": "timestamp without time zone"
+  },
+  {
+    "table_name": "users",
+    "column_name": "phone",
+    "data_type": "character varying"
+  },
+  {
+    "table_name": "waste_pricing",
+    "column_name": "id",
+    "data_type": "integer"
+  },
+  {
+    "table_name": "waste_pricing",
+    "column_name": "waste_type",
+    "data_type": "character varying"
+  },
+  {
+    "table_name": "waste_pricing",
+    "column_name": "price_per_kg",
+    "data_type": "numeric"
+  },
+  {
+    "table_name": "waste_pricing",
+    "column_name": "description",
+    "data_type": "text"
+  },
+  {
+    "table_name": "waste_pricing",
+    "column_name": "created_at",
+    "data_type": "timestamp without time zone"
+  }
+]

@@ -1,0 +1,83 @@
+[
+  {
+    "id": 1,
+    "name": "Admin",
+    "email": "ecofriendadmin@gmail.com",
+    "password_hash": "$2b$10$TwGuWtIblzsbQtuicDnF/.5oOtKP5cHoImTN9T.rWYrK.BWuZ2u56",
+    "is_admin": true,
+    "created_at": "2026-05-28T10:34:59.971Z",
+    "phone": null
+  },
+  {
+    "id": 2,
+    "name": "Beni Iban",
+    "email": "birindabeni312@gmail.com",
+    "password_hash": "$2b$10$jWUcPpqKmEnPtHn7cGQYgO5tUKPYOcw6.wCXhhbx6sC8.MgG4zbtm",
+    "is_admin": false,
+    "created_at": "2026-05-28T10:38:39.702Z",
+    "phone": null
+  },
+  {
+    "id": 3,
+    "name": "Isimbi Tricia",
+    "email": "tricia@gmail.com",
+    "password_hash": "$2b$10$fsG1MjKTb4hkg.WcxyvOROwaiC3MY1CPSQUJ7WOyKln7zTzTuCLce",
+    "is_admin": false,
+    "created_at": "2026-05-28T11:35:38.565Z",
+    "phone": null
+  },
+  {
+    "id": 4,
+    "name": "irakiza jules fernand",
+    "email": "iijulesfernand@gmail.com",
+    "password_hash": "$2b$10$s1We.7DD1Vt2Sve9Aa7zD.2DjumHIA0nMRmwKqti2pfHH0yNgonr6",
+    "is_admin": false,
+    "created_at": "2026-06-01T06:23:25.431Z",
+    "phone": null
+  },
+  {
+    "id": 5,
+    "name": "isimbi tricia ",
+    "email": "isimbitricia@gmail.com",
+    "password_hash": "$2b$10$msp.Sme7b7lvexQWawW82O5jF1FIvkoU9oay58JgUn9nPVKj2zKz6",
+    "is_admin": false,
+    "created_at": "2026-06-01T06:25:56.353Z",
+    "phone": null
+  },
+  {
+    "id": 6,
+    "name": "Mika Uwakristo",
+    "email": "mikauwakristo@gmail.com",
+    "password_hash": "$2b$10$Ve08zngXNrJzk6KAKlW9C.rsx3eM/cx3HJBmH9LiwXdJHNBq0D58i",
+    "is_admin": false,
+    "created_at": "2026-06-02T04:57:06.316Z",
+    "phone": null
+  },
+  {
+    "id": 7,
+    "name": "BENI BIRINDA",
+    "email": "beniiban65@gmail.com",
+    "password_hash": "$2b$10$yRzQvBSxFaeFlGfMpUFFje1oKBZa.JdIXuoX5vwLauCyu0VqaH0Ou",
+    "is_admin": false,
+    "created_at": "2026-06-02T07:55:38.036Z",
+    "phone": "+250788505555"
+  },
+  {
+    "id": 8,
+    "name": "lsaro Nella",
+    "email": "isaronella@gmail.com",
+    "password_hash": "$2b$10$tYJRGYM5wnUTJ6b8l94fMerxqYNn9dBSn/neTJLx7IyGtQVznExCS",
+    "is_admin": false,
+    "created_at": "2026-06-02T08:08:32.047Z",
+    "phone": "0788280953"
+  },
+  {
+    "id": 9,
+    "name": "prince muvunyi",
+    "email": "pmuvunyi311@gmail.com",
+    "password_hash": "$2b$10$1B8laQkhVZFUFH162F4W0.vYcARUnA7S3kDLvaSkDzwIxZUJzeTtG",
+    "is_admin": false,
+    "created_at": "2026-06-02T08:21:26.351Z",
+    "phone": "+250796139281"
+  }
+]

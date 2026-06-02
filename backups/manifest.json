@@ -1,0 +1,21 @@
+{
+  "generated_at": "2026-06-02T11:04:32.392Z",
+  "tables": {
+    "users": {
+      "rows": 9,
+      "file": "backups/users.json"
+    },
+    "schedules": {
+      "rows": 11,
+      "file": "backups/schedules.json"
+    },
+    "pickups": {
+      "rows": 5,
+      "file": "backups/pickups.json"
+    },
+    "waste_pricing": {
+      "rows": 4,
+      "file": "backups/waste_pricing.json"
+    }
+  }
+}
