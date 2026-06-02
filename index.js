@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
+import nodemailer from 'nodemailer';
 
 const app = express();
 app.use(cors());
@@ -294,4 +295,51 @@ initDB().then(() => {
   app.listen(PORT, () => {
     console.log(`🚀 Eco Friend backend server running on port ${PORT}`);
   });
+});
+
+// ─── ROUTE: NOTIFY CUSTOMER (Admin) ───────────────────────────────────────────
+app.post('/api/schedules/:id/notify', authenticateToken, async (req, res) => {
+  const scheduleId = req.params.id;
+  const { message } = req.body;
+  try {
+    // Fetch schedule and user
+    const { rows } = await pool.query(
+      `SELECT schedules.*, users.name as user_name, users.email as user_email, users.phone as user_phone
+       FROM schedules JOIN users ON schedules.user_id = users.id WHERE schedules.id = $1`,
+      [scheduleId]
+    );
+    if (rows.length === 0) return res.status(404).json({ message: 'Schedule not found' });
+    const schedule = rows[0];
+
+    // If SMTP configured, send email
+    if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 587,
+        secure: process.env.SMTP_SECURE === 'true',
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS
+        }
+      });
+
+      const mailOptions = {
+        from: process.env.SMTP_FROM || 'no-reply@eco-friend.com',
+        to: schedule.user_email,
+        subject: `EcoFriend: Notification about your pickup (#${schedule.id})`,
+        text: message || `Hello ${schedule.user_name},\n\nPlease note an update regarding your scheduled pickup on ${schedule.date} at ${schedule.time}.\n\nRegards, EcoFriend`,
+      };
+
+      await transporter.sendMail(mailOptions);
+      console.log(`Notification email sent to ${schedule.user_email} for schedule ${schedule.id}`);
+      return res.json({ message: 'Notification sent via email' });
+    }
+
+    // Fallback: just log and respond (no SMTP configured)
+    console.log('Notify fallback:', { scheduleId, to: schedule.user_email, phone: schedule.user_phone, message });
+    res.json({ message: 'Notification logged (no SMTP configured).', details: { to: schedule.user_email, phone: schedule.user_phone } });
+  } catch (err) {
+    console.error('Notify error:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
