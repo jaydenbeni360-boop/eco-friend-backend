@@ -214,30 +214,30 @@ app.put('/api/schedules/:id/complete', authenticateToken, async (req, res) => {
 
 // ─── ROUTE: POST SCHEDULE ──────────────────────────────────────────────────────
 app.post('/api/schedules', authenticateToken, async (req, res) => {
-  const { date, time, waste_type, weight = 1.0, price = 0, address, house_number, latitude, longitude } = req.body;
-  if (!date || !time || !waste_type || !weight) {
-    return res.status(400).json({ message: 'Date, time, waste type, and weight are required' });
+  const { date, time, waste_type, weight = null, price = 0, address, house_number, latitude, longitude } = req.body;
+  if (!date || !time || !waste_type) {
+    return res.status(400).json({ message: 'Date, time and waste type are required' });
   }
 
   try {
     const insertResult = await pool.query(
-      'INSERT INTO schedules (user_id, date, time, waste_type, weight, price, address, house_number, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
-      [req.user.id, date, time, waste_type, weight, price, address || 'User provided address', house_number || null, latitude || null, longitude || null]
+      'INSERT INTO schedules (user_id, date, time, waste_type, weight, price, address, house_number, latitude, longitude, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *',
+      [req.user.id, date, time, waste_type, weight, price, address || 'User provided address', house_number || null, latitude || null, longitude || null, 'Upcoming']
     );
     const schedule = insertResult.rows[0];
     res.status(201).json({ 
       id: schedule.id, 
       user_id: schedule.user_id, 
-      date, 
-      time, 
-      waste_type, 
-      weight,
-      price,
+      date: schedule.date, 
+      time: schedule.time, 
+      waste_type: schedule.waste_type, 
+      weight: schedule.weight,
+      price: schedule.price,
       address: schedule.address,
       house_number: schedule.house_number,
       latitude: schedule.latitude,
       longitude: schedule.longitude,
-      status: 'Upcoming' 
+      status: schedule.status || 'Upcoming' 
     });
   } catch (err) {
     console.error('Post schedule error:', err);
