@@ -164,7 +164,7 @@ app.post('/api/schedules/:id/pay-momo', authenticateToken, async (req, res) => {
 // ─── ROUTE: GET SCHEDULES ──────────────────────────────────────────────────────
 app.get('/api/schedules', authenticateToken, async (req, res) => {
   try {
-    const isAdmin = req.user.email === 'ecofriendadmin@gmail.com';
+    const isAdmin = !!req.user.is_admin;
     
     if (isAdmin) {
       const { rows } = await pool.query(`
@@ -248,7 +248,7 @@ app.post('/api/schedules', authenticateToken, async (req, res) => {
 // ─── ROUTE: GET PICKUPS ────────────────────────────────────────────────────────
 app.get('/api/pickups', authenticateToken, async (req, res) => {
   try {
-    const isAdmin = req.user.email === 'ecofriendadmin@gmail.com';
+    const isAdmin = !!req.user.is_admin;
     
     if (isAdmin) {
       const { rows } = await pool.query(`
