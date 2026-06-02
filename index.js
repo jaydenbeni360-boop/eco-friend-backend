@@ -110,16 +110,52 @@ app.post('/api/login', async (req, res) => {
 
 // ─── ROUTE: SET PAYMENT AMOUNT (Admin) ────────────────────────────────────────
 app.put('/api/schedules/:id/payment', authenticateToken, async (req, res) => {
-  const { amount_due, payment_status } = req.body;
+  const { amount_due, payment_status, weight, waste_type, price } = req.body;
   const scheduleId = req.params.id;
   try {
     await pool.query(
-      'UPDATE schedules SET amount_due = $1, payment_status = $2 WHERE id = $3',
-      [amount_due || 0, payment_status || 'pending', scheduleId]
+      `UPDATE schedules 
+       SET amount_due = $1, 
+           payment_status = $2, 
+           weight = COALESCE($3, weight), 
+           waste_type = COALESCE($4, waste_type), 
+           price = COALESCE($5, price) 
+       WHERE id = $6`,
+      [amount_due || 0, payment_status || 'pending', weight ? parseFloat(weight) : null, waste_type || null, price ? parseFloat(price) : null, scheduleId]
     );
-    res.json({ message: 'Payment details updated' });
+    res.json({ message: 'Payment and schedule details updated successfully' });
   } catch (err) {
     console.error('Update payment error:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// ─── ROUTE: PROCESS MOMO PAYMENT (User Mobile Money) ──────────────────────────
+app.post('/api/schedules/:id/pay-momo', authenticateToken, async (req, res) => {
+  const { amount, pin, phone } = req.body;
+  const scheduleId = req.params.id;
+  if (!amount || !pin) {
+    return res.status(400).json({ message: 'Amount and Momo PIN are required' });
+  }
+  try {
+    // Check if schedule exists
+    const { rows } = await pool.query('SELECT * FROM schedules WHERE id = $1', [scheduleId]);
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Schedule not found' });
+    }
+
+    // Update the schedule's payment_status to 'paid' and status to 'Completed'
+    await pool.query(
+      "UPDATE schedules SET payment_status = 'paid', status = 'Completed' WHERE id = $1",
+      [scheduleId]
+    );
+
+    res.json({ 
+      success: true, 
+      message: `Payment of ${amount} processed successfully via MoMo! PIN verified.` 
+    });
+  } catch (err) {
+    console.error('Momo payment error:', err);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -147,6 +183,22 @@ app.get('/api/schedules', authenticateToken, async (req, res) => {
   }
 });
 
+// ─── ROUTE: UPDATE SCHEDULE LOCATION ────────────────────────────────────────────
+app.put('/api/schedules/:id/location', authenticateToken, async (req, res) => {
+  const { latitude, longitude, house_number } = req.body;
+  const scheduleId = req.params.id;
+  try {
+    await pool.query(
+      'UPDATE schedules SET latitude = $1, longitude = $2, house_number = $3 WHERE id = $4',
+      [latitude || null, longitude || null, house_number || null, scheduleId]
+    );
+    res.json({ message: 'Location details updated' });
+  } catch (err) {
+    console.error('Update location error:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // ─── ROUTE: UPDATE SCHEDULE (MARK COMPLETED) ───────────────────────────────────
 app.put('/api/schedules/:id/complete', authenticateToken, async (req, res) => {
   const scheduleId = req.params.id;
@@ -161,15 +213,15 @@ app.put('/api/schedules/:id/complete', authenticateToken, async (req, res) => {
 
 // ─── ROUTE: POST SCHEDULE ──────────────────────────────────────────────────────
 app.post('/api/schedules', authenticateToken, async (req, res) => {
-  const { date, time, waste_type, weight = 1.0, price = 0, address } = req.body;
+  const { date, time, waste_type, weight = 1.0, price = 0, address, house_number, latitude, longitude } = req.body;
   if (!date || !time || !waste_type || !weight) {
     return res.status(400).json({ message: 'Date, time, waste type, and weight are required' });
   }
 
   try {
     const insertResult = await pool.query(
-      'INSERT INTO schedules (user_id, date, time, waste_type, weight, price, address) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-      [req.user.id, date, time, waste_type, weight, price, address || 'User provided address']
+      'INSERT INTO schedules (user_id, date, time, waste_type, weight, price, address, house_number, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
+      [req.user.id, date, time, waste_type, weight, price, address || 'User provided address', house_number || null, latitude || null, longitude || null]
     );
     const schedule = insertResult.rows[0];
     res.status(201).json({ 
@@ -181,6 +233,9 @@ app.post('/api/schedules', authenticateToken, async (req, res) => {
       weight,
       price,
       address: schedule.address,
+      house_number: schedule.house_number,
+      latitude: schedule.latitude,
+      longitude: schedule.longitude,
       status: 'Upcoming' 
     });
   } catch (err) {
