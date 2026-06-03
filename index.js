@@ -22,10 +22,41 @@ const pool = new Pool({
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
+async function applyDatabaseMigrations() {
+  const migrateSql = `
+    ALTER TABLE users
+      ADD COLUMN IF NOT EXISTS phone VARCHAR(30);
+
+    ALTER TABLE schedules
+      ADD COLUMN IF NOT EXISTS amount_due DECIMAL(10,2) DEFAULT 0;
+
+    ALTER TABLE schedules
+      ADD COLUMN IF NOT EXISTS payment_status VARCHAR(20) DEFAULT 'none';
+
+    ALTER TABLE schedules
+      ADD COLUMN IF NOT EXISTS house_number VARCHAR(50);
+
+    ALTER TABLE schedules
+      ADD COLUMN IF NOT EXISTS latitude DECIMAL(10,8);
+
+    ALTER TABLE schedules
+      ADD COLUMN IF NOT EXISTS longitude DECIMAL(11,8);
+  `;
+
+  try {
+    await pool.query(migrateSql);
+    console.log('✅ Database migration completed.');
+  } catch (err) {
+    console.error('❌ Database migration failed:', err.message || err);
+    throw err;
+  }
+}
+
 async function initDB() {
   try {
     await pool.query('SELECT 1');
     console.log('✅ Connected to PostgreSQL database successfully.');
+    await applyDatabaseMigrations();
   } catch (err) {
     console.error('❌ Could not connect to PostgreSQL database:', err.message);
     process.exit(1);
