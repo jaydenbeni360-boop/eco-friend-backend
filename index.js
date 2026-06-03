@@ -24,6 +24,49 @@ const pool = new Pool({
 
 async function applyDatabaseMigrations() {
   const migrateSql = `
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(100) NOT NULL,
+      email VARCHAR(255) NOT NULL UNIQUE,
+      password_hash VARCHAR(255) NOT NULL,
+      phone VARCHAR(30),
+      is_admin BOOLEAN NOT NULL DEFAULT FALSE,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS schedules (
+      id SERIAL PRIMARY KEY,
+      user_id INT NOT NULL,
+      date DATE NOT NULL,
+      time TIME NOT NULL,
+      waste_type VARCHAR(50) NOT NULL,
+      weight DECIMAL(5,2) DEFAULT 1.0,
+      price DECIMAL(10,2) DEFAULT 0,
+      address TEXT NOT NULL,
+      house_number VARCHAR(50),
+      latitude DECIMAL(10,8),
+      longitude DECIMAL(11,8),
+      amount_due DECIMAL(10,2) DEFAULT 0,
+      payment_status VARCHAR(20) DEFAULT 'none',
+      status VARCHAR(50) NOT NULL DEFAULT 'Upcoming',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS pickups (
+      id SERIAL PRIMARY KEY,
+      user_id INT NOT NULL,
+      type VARCHAR(50) NOT NULL,
+      weight DECIMAL(5,2) NOT NULL,
+      points INT NOT NULL,
+      collected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
+
+    INSERT INTO users (name, email, password_hash, is_admin)
+      VALUES ('Admin', 'ecofriendadmin@gmail.com', '$2b$10$TwGuWtIblzsbQtuicDnF/.5oOtKP5cHoImTN9T.rWYrK.BWuZ2u56', TRUE)
+      ON CONFLICT (email) DO NOTHING;
+
     ALTER TABLE users
       ADD COLUMN IF NOT EXISTS phone VARCHAR(30);
 
@@ -41,6 +84,12 @@ async function applyDatabaseMigrations() {
 
     ALTER TABLE schedules
       ADD COLUMN IF NOT EXISTS longitude DECIMAL(11,8);
+
+    ALTER TABLE schedules
+      ADD COLUMN IF NOT EXISTS weight DECIMAL(5,2) DEFAULT 1.0;
+
+    ALTER TABLE schedules
+      ADD COLUMN IF NOT EXISTS price DECIMAL(10,2) DEFAULT 0;
   `;
 
   try {
